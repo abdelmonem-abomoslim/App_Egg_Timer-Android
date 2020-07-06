@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             counterActive = true;
             timerSeekBar.setEnabled(false);
+            timerSeekBar.setVisibility(View.GONE);
             timerStart.setText("Stop!");
             countDownTimer = new CountDownTimer(timerSeekBar.getProgress()*1000, 1000) {
                 @Override
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     public void resetTimer() {
         counterActive = false;
         timerSeekBar.setEnabled(true);
+        timerSeekBar.setVisibility(View.VISIBLE);
         countDownTimer.cancel();
         timerSeekBar.setProgress(30);
         timerStart.setText("Start!!");
