@@ -16,23 +16,41 @@ public class MainActivity extends AppCompatActivity {
     TextView countDownTextView;
     SeekBar timerSeekBar;
     Boolean counterActive = false;
+    Button timerStart;
+    CountDownTimer countDownTimer;
 
     public void buttonClicked(View view){
 
-        counterActive = counterActive == false?true:false;
-        CountDownTimer countDownTimer = new CountDownTimer(timerSeekBar.getProgress()*1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                updateTimer((int)millisUntilFinished/1000);
-            }
+        if (counterActive){
+            resetTimer();
 
-            @Override
-            public void onFinish() {
-                Log.i("Finished", "Timer all done");
-                MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.airsound);
-                mediaPlayer.start();
-            }
-        }.start();
+        }else{
+            counterActive = true;
+            timerSeekBar.setEnabled(false);
+            timerStart.setText("Stop!");
+            countDownTimer = new CountDownTimer(timerSeekBar.getProgress()*1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    updateTimer((int)millisUntilFinished/1000);
+                }
+
+                @Override
+                public void onFinish() {
+                    Log.i("Finished", "Timer all done");
+                    MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.airsound);
+                    mediaPlayer.start();
+                    resetTimer();
+                }
+            }.start();
+        }
+    }
+
+    public void resetTimer() {
+        counterActive = false;
+        timerSeekBar.setEnabled(true);
+        countDownTimer.cancel();
+        timerSeekBar.setProgress(30);
+        timerStart.setText("Start!!");
     }
 
     public void updateTimer(int progress){
@@ -50,7 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
         timerSeekBar = findViewById(R.id.timerSeekBar);
         countDownTextView = findViewById(R.id.countDownTextView);
-        Button timerStart = findViewById(R.id.timerStart);
+        timerStart = findViewById(R.id.timerStart);
+        timerStart.setText("Start!!");
 
         timerSeekBar.setMax(600);
         timerSeekBar.setProgress(30);
